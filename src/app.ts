@@ -10,7 +10,8 @@ class App {
     constructor(appInt: { port: number, middleware: any, controller: any }) {
         this.app = express()
         this.port = appInt.port
-        this.routes(appInt.controller) 
+        this.routes(appInt.controller)
+        this.middlewares(appInt.middleware) 
     } 
 
     public listen(){
@@ -18,7 +19,14 @@ class App {
             console.log(`Aap has started on port ${this.port}`)
         })
     }  
-    private routes(controllers){
+
+    private middlewares(middlewares: any){
+        middlewares.forEach(middleware => {
+            this.app.use(middleware)
+        });
+    }
+
+    private routes(controllers: any){
         controllers.forEach(controller => {
             console.log(controller.path)
             this.app.use(controller.path, controller.router)
